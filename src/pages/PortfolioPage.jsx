@@ -83,13 +83,31 @@ function PortfolioPage() {
   const profitPercent = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
 
   return (
-    <div className="portfolio-container page-layout">
-      <div className="container p-4">
-        {/* Metric Cards Banner Grid */}
-        <div className="mb-8 stats-row">
-          <div className="stat-card">
+    <div
+      className="portfolio-container page-layout"
+      style={{ width: "100%", boxSizing: "border-box" }}
+    >
+      <div
+        className="container p-4"
+        style={{ width: "100%", boxSizing: "border-box" }}
+      >
+        {/* Metric Cards Banner Grid - Fully Responsive Layout */}
+        <div
+          className="mb-8 stats-row"
+          style={{
+            display: "flex",
+            flexDirection: window.innerWidth <= 768 ? "column" : "row",
+            gap: "1rem",
+            width: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            className="stat-card"
+            style={{ flex: 1, boxSizing: "border-box" }}
+          >
             <p className="stat-label">Total Balance</p>
-            <h2 className="stat-value">
+            <h2 className="stat-value" style={{ wordBreak: "break-all" }}>
               $
               {totalValue.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
@@ -97,10 +115,19 @@ function PortfolioPage() {
             </h2>
           </div>
 
-          <div className="stat-card">
+          <div
+            className="stat-card"
+            style={{ flex: 1, boxSizing: "border-box" }}
+          >
             <p className="stat-label">Net Profit/Loss</p>
             <h2
               className={`stat-value ${netProfit >= 0 ? "text-up" : "text-down"}`}
+              style={{
+                wordBreak: "break-all",
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "baseline",
+              }}
             >
               {netProfit >= 0 ? "+" : ""}$
               {Math.abs(netProfit).toLocaleString(undefined, {
@@ -115,14 +142,31 @@ function PortfolioPage() {
           <button
             onClick={() => setShowModal(true)}
             className="add-portfolio-btn"
+            style={{
+              width: window.innerWidth <= 768 ? "100%" : "auto",
+              boxSizing: "border-box",
+              height: "56px",
+              flexShrink: 0,
+            }}
           >
             <Plus size={18} /> Add Asset
           </button>
         </div>
 
-        {/* Assets Holdings Matrix Table Panel */}
-        <div className="holdings-wrapper glass-panel">
-          <table className="holdings-table">
+        {/* Assets Holdings Matrix Box Container with Swipe Scroll Fix */}
+        <div
+          className="holdings-wrapper glass-panel"
+          style={{
+            width: "100%",
+            overflowX: "auto",
+            WebkitOverflowScrolling: "touch",
+            boxSizing: "border-box",
+          }}
+        >
+          <table
+            className="holdings-table"
+            style={{ minWidth: "600px", width: "100%" }}
+          >
             <thead>
               <tr>
                 <th>Asset</th>
@@ -148,7 +192,7 @@ function PortfolioPage() {
                       />
                       <div>
                         <p className="text-base font-semibold">{asset.name}</p>
-                        <span className="text-xs tracking-wider text-zinc-500">
+                        <span className="text-xs tracking-wider uppercase text-zinc-500">
                           {asset.symbol}
                         </span>
                       </div>
@@ -186,6 +230,7 @@ function PortfolioPage() {
                           );
                         }}
                         className="delete-btn"
+                        style={{ padding: "0.5rem" }}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -197,10 +242,22 @@ function PortfolioPage() {
           </table>
         </div>
 
-        {/* Modal Entry Popup Screen Container */}
+        {/* Modal Entry Popup Screen Container - Fluid Mobile Wrapping */}
         {showModal && (
-          <div className="modal-backdrop">
-            <div className="p-6 modal-content glass-card">
+          <div
+            className="modal-backdrop"
+            style={{ padding: "1rem", boxSizing: "border-box" }}
+          >
+            <div
+              className="p-6 modal-content glass-card"
+              style={{
+                width: "100%",
+                maxWidth: "450px",
+                maxHeight: "90vh",
+                overflowY: "auto",
+                boxSizing: "border-box",
+              }}
+            >
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold">Add Transaction</h2>
                 <X
@@ -210,17 +267,27 @@ function PortfolioPage() {
               </div>
 
               {!selectedCoin ? (
-                <div className="search-section">
-                  <div className="search-input-wrapper">
+                <div
+                  className="search-section"
+                  style={{ width: "100%", boxSizing: "border-box" }}
+                >
+                  <div
+                    className="search-input-wrapper"
+                    style={{ width: "100%", boxSizing: "border-box" }}
+                  >
                     <Search size={18} className="text-zinc-500" />
                     <input
                       placeholder="Search coin name (e.g. Bitcoin)"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
+                      style={{ width: "100%", boxSizing: "border-box" }}
                     />
                   </div>
 
-                  <div className="search-results custom-scroll">
+                  <div
+                    className="search-results custom-scroll"
+                    style={{ maxHeight: "200px", overflowY: "auto" }}
+                  >
                     {marketData
                       .filter((c) =>
                         c.name.toLowerCase().includes(search.toLowerCase()),
@@ -230,6 +297,7 @@ function PortfolioPage() {
                           key={coin.id}
                           className="text-sm font-medium search-item"
                           onClick={() => setSelectedCoin(coin)}
+                          style={{ boxSizing: "border-box" }}
                         >
                           <img src={coin.image} alt="" className="w-6 h-6" />
                           <span>{coin.name}</span>
@@ -238,23 +306,50 @@ function PortfolioPage() {
                   </div>
                 </div>
               ) : (
-                <div className="form-section animate-fade">
-                  <div className="flex items-center gap-3 p-3 mb-6 border bg-zinc-800/40 rounded-xl border-zinc-800">
+                <div
+                  className="form-section animate-fade"
+                  style={{ width: "100%", boxSizing: "border-box" }}
+                >
+                  <div
+                    className="flex items-center gap-3 p-3 mb-6 border bg-zinc-800/40 rounded-xl border-zinc-800"
+                    style={{ flexWrap: "wrap", boxSizing: "border-box" }}
+                  >
                     <img src={selectedCoin.image} className="w-8 h-8" alt="" />
-                    <span className="text-base font-semibold text-white">
+                    <span
+                      className="text-base font-semibold text-white"
+                      style={{ wordBreak: "break-word" }}
+                    >
                       {selectedCoin.name} Selected
                     </span>
                     <button
                       onClick={() => setSelectedCoin(null)}
                       className="ml-auto text-xs font-semibold text-accent hover:underline"
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
                     >
                       Change
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="input-group">
-                      <label className="mb-2 text-xs font-semibold tracking-wider ">
+                  {/* Form input elements stack columns dynamically on ultra-small mobile displays */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1rem",
+                      marginBottom: "1.5rem",
+                      width: "100%",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <div
+                      className="input-group"
+                      style={{ width: "100%", boxSizing: "border-box" }}
+                    >
+                      <label className="mb-2 text-xs font-semibold tracking-wider uppercase text-zinc-400">
                         Quantity
                       </label>
                       <input
@@ -262,11 +357,15 @@ function PortfolioPage() {
                         value={qty}
                         onChange={(e) => setQty(e.target.value)}
                         className="text-sm font-medium"
+                        style={{ width: "100%", boxSizing: "border-box" }}
                       />
                     </div>
 
-                    <div className="input-group">
-                      <label className="mb-2 text-xs font-semibold tracking-wider ">
+                    <div
+                      className="input-group"
+                      style={{ width: "100%", boxSizing: "border-box" }}
+                    >
+                      <label className="mb-2 text-xs font-semibold tracking-wider uppercase text-zinc-400">
                         Buy Price
                       </label>
                       <input
@@ -275,6 +374,7 @@ function PortfolioPage() {
                         onChange={(e) => setBuyPrice(e.target.value)}
                         placeholder={selectedCoin.current_price}
                         className="text-sm font-medium"
+                        style={{ width: "100%", boxSizing: "border-box" }}
                       />
                     </div>
                   </div>
@@ -282,6 +382,7 @@ function PortfolioPage() {
                   <button
                     onClick={handleAddAsset}
                     className="text-sm font-bold tracking-wider submit-portfolio-btn"
+                    style={{ width: "100%", boxSizing: "border-box" }}
                   >
                     Add to Portfolio
                   </button>
