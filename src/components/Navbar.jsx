@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Vault } from "lucide-react";
+import { CircleDollarSign } from "lucide-react";
 
 function Navbar() {
   const location = useLocation();
@@ -11,8 +11,6 @@ function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  // track if the web3 component has initialized internally to kill the placeholder glowing pulse smoothly
   const [isWalletReady, setIsWalletReady] = useState(false);
 
   useEffect(() => {
@@ -31,7 +29,6 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Poll for the AppKit web component custom element to finish rendering its shadow DOM
   useEffect(() => {
     const checkElement = setInterval(() => {
       const el = document.querySelector("appkit-button");
@@ -68,36 +65,49 @@ function Navbar() {
           textDecoration: "none",
           display: "flex",
           alignItems: "center",
-          gap: "0.5rem",
+          gap: "0.6rem",
         }}
       >
         <div
           style={{
             background:
-              "linear-gradient(135deg, rgba(0, 255, 195, 0.15), rgba(0, 170, 255, 0.15))",
-            border: "1px solid rgba(0, 255, 195, 0.3)",
-            borderRadius: "12px",
-            padding: "0.5rem",
+              "linear-gradient(135deg, rgba(0, 255, 195, 0.12), rgba(0, 170, 255, 0.05))",
+            border: "1px solid rgba(0, 255, 195, 0.25)",
+            borderRadius: "50%",
+            padding: "0.55rem",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 0 15px rgba(0, 255, 195, 0.2)",
+            boxShadow:
+              "0 0 20px rgba(0, 255, 195, 0.15), inset 0 0 10px rgba(0, 255, 195, 0.1)",
           }}
         >
-          <Vault size={24} style={{ color: "var(--accent-color)" }} />
+          <CircleDollarSign
+            size={22}
+            style={{
+              color: "var(--accent-color)",
+              filter: "drop-shadow(0 0 4px var(--accent-color))",
+            }}
+          />
         </div>
 
         <span
           className="text-gold"
           style={{
-            fontSize: "1.5rem",
+            fontSize: "1.4rem",
             fontWeight: "800",
-            letterSpacing: "1.5px",
+            letterSpacing: "2px",
             fontFamily: "'Orbitron', sans-serif",
           }}
         >
           COIN
-          <span style={{ color: "var(--accent-color)", fontWeight: "400" }}>
+          <span
+            style={{
+              color: "var(--accent-color)",
+              fontWeight: "300",
+              marginLeft: "1px",
+            }}
+          >
             IQ
           </span>
         </span>
@@ -112,32 +122,31 @@ function Navbar() {
         ☰
       </button>
 
-      {/* Nav Links */}
+      {/* Nav Links Container */}
       <div className={`nav-links-container ${menuOpen ? "open" : ""}`}>
         {links.map(({ label, path }) => (
           <Link
             key={path}
             to={path}
-            className={`nav-link ${
-              location.pathname === path ? "active-link" : ""
-            }`}
+            className={`nav-link ${location.pathname === path ? "active-link" : ""}`}
           >
             {label}
           </Link>
         ))}
 
-        {/* Wallet Button Container - Masking the 10s load latency */}
+        {/* Unified Wallet Button Wrapper */}
         <div
           className="wallet-btn-wrapper"
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "flex-start",
             position: "relative",
             minWidth: "135px",
-            minHeight: "40px",
+            height: "40px",
+            margin: menuOpen ? "0.5rem 0" : "0",
           }}
         >
-          {/* Glowing Premium Loader Shell Mask */}
           {!isWalletReady && (
             <div
               style={{
@@ -157,9 +166,11 @@ function Navbar() {
           )}
 
           <appkit-button
+            balance="hide"
             style={{
               opacity: isWalletReady ? 1 : 0,
               transition: "opacity 0.3s ease",
+              width: "100%",
             }}
           />
         </div>
@@ -179,7 +190,10 @@ function Navbar() {
             </button>
 
             {showDropdown && (
-              <div className="dropdown-menu">
+              <div
+                className="dropdown-menu"
+                style={{ position: menuOpen ? "static" : "absolute" }}
+              >
                 <Link to="/profile" className="dropdown-item">
                   👤 Profile
                 </Link>
@@ -194,9 +208,7 @@ function Navbar() {
 
         <Link
           to="/about"
-          className={`nav-link ${
-            location.pathname === "/about" ? "active-link" : ""
-          }`}
+          className={`nav-link ${location.pathname === "/about" ? "active-link" : ""}`}
         >
           About
         </Link>
