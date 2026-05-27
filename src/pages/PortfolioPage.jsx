@@ -91,66 +91,113 @@ function PortfolioPage() {
         className="container p-4"
         style={{ width: "100%", boxSizing: "border-box" }}
       >
-        {/* Metric Cards Banner Grid - Fully Responsive Layout */}
+        {/* Clean, Modern Header Layout Block */}
         <div
-          className="mb-8 stats-row"
+          className="mb-8"
           style={{
             display: "flex",
-            flexDirection: window.innerWidth <= 768 ? "column" : "row",
-            gap: "1rem",
+            flexDirection: "column",
+            gap: "1.5rem",
             width: "100%",
             boxSizing: "border-box",
           }}
         >
+          {/* Top Row: Visual Title and Button aligned on desktop */}
           <div
-            className="stat-card"
-            style={{ flex: 1, boxSizing: "border-box" }}
-          >
-            <p className="stat-label">Total Balance</p>
-            <h2 className="stat-value" style={{ wordBreak: "break-all" }}>
-              $
-              {totalValue.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-              })}
-            </h2>
-          </div>
-
-          <div
-            className="stat-card"
-            style={{ flex: 1, boxSizing: "border-box" }}
-          >
-            <p className="stat-label">Net Profit/Loss</p>
-            <h2
-              className={`stat-value ${netProfit >= 0 ? "text-up" : "text-down"}`}
-              style={{
-                wordBreak: "break-all",
-                display: "flex",
-                flexWrap: "wrap",
-                alignItems: "baseline",
-              }}
-            >
-              {netProfit >= 0 ? "+" : ""}$
-              {Math.abs(netProfit).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-              })}
-              <span className="ml-2 text-sm font-normal">
-                ({profitPercent.toFixed(2)}%)
-              </span>
-            </h2>
-          </div>
-
-          <button
-            onClick={() => setShowModal(true)}
-            className="add-portfolio-btn"
             style={{
-              width: window.innerWidth <= 768 ? "100%" : "auto",
-              boxSizing: "border-box",
-              height: "56px",
-              flexShrink: 0,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              flexWrap: "wrap",
+              gap: "1rem",
             }}
           >
-            <Plus size={18} /> Add Asset
-          </button>
+            <h2 style={{ fontSize: "1.75rem", fontWeight: "700", margin: 0 }}>
+              Asset <span className="text-gold">Portfolio</span>
+            </h2>
+
+            <button
+              onClick={() => setShowModal(true)}
+              className="add-portfolio-btn"
+              style={{
+                width: "auto",
+                minWidth: "140px",
+                padding: "0 1.5rem",
+                boxSizing: "border-box",
+                height: "46px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+                fontSize: "0.9rem",
+                fontWeight: "700",
+                margin: 0,
+              }}
+            >
+              <Plus size={16} /> Add Asset
+            </button>
+          </div>
+
+          {/* Bottom Row: Dynamic Metric Cards Grid Layout */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "1.25rem",
+              width: "100%",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              className="stat-card"
+              style={{ margin: 0, boxSizing: "border-box" }}
+            >
+              <p className="stat-label">Total Balance</p>
+              <h2
+                className="stat-value"
+                style={{
+                  wordBreak: "break-all",
+                  fontSize: "1.75rem",
+                  margin: "0.25rem 0 0",
+                }}
+              >
+                $
+                {totalValue.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
+              </h2>
+            </div>
+
+            <div
+              className="stat-card"
+              style={{ margin: 0, boxSizing: "border-box" }}
+            >
+              <p className="stat-label">Net Profit/Loss</p>
+              <h2
+                className={`stat-value ${netProfit >= 0 ? "text-up" : "text-down"}`}
+                style={{
+                  wordBreak: "break-all",
+                  fontSize: "1.75rem",
+                  margin: "0.25rem 0 0",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "baseline",
+                }}
+              >
+                {netProfit >= 0 ? "+" : ""}$
+                {Math.abs(netProfit).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
+                <span
+                  className="ml-2 text-sm font-normal"
+                  style={{ color: "#a1a1aa" }}
+                >
+                  ({profitPercent.toFixed(2)}%)
+                </span>
+              </h2>
+            </div>
+          </div>
         </div>
 
         {/* Assets Holdings Matrix Box Container with Swipe Scroll Fix */}
@@ -334,7 +381,6 @@ function PortfolioPage() {
                     </button>
                   </div>
 
-                  {/* Form input elements stack columns dynamically on ultra-small mobile displays */}
                   <div
                     style={{
                       display: "flex",

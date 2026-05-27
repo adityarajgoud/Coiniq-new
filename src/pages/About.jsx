@@ -77,25 +77,31 @@ function About() {
     <div
       className="page-layout"
       style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
+        width: "100vw",
+        margin: 0,
+        padding: 0,
         boxSizing: "border-box",
+        overflowX: "hidden",
       }}
     >
       <div
-        className="container about-page-wrapper"
+        className="about-page-wrapper"
         style={{
-          maxWidth: "1100px",
           width: "100%",
-          padding: "2rem 1rem",
+          margin: 0,
+          padding: "2rem",
           minHeight: "100vh",
           boxSizing: "border-box",
         }}
       >
         <div
           className="about-content-container"
-          style={{ width: "100%", boxSizing: "border-box" }}
+          style={{
+            width: "100%",
+            margin: 0,
+            padding: 0,
+            boxSizing: "border-box",
+          }}
         >
           {/* 🌟 Centered Hero Section */}
           <motion.section
