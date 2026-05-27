@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Vault } from "lucide-react";
+
 function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,13 +12,14 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // close menu on route change
+  // track if the web3 component has initialized internally to kill the placeholder glowing pulse smoothly
+  const [isWalletReady, setIsWalletReady] = useState(false);
+
   useEffect(() => {
     setShowDropdown(false);
     setMenuOpen(false);
   }, [location.pathname]);
 
-  // close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -27,6 +29,19 @@ function Navbar() {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Poll for the AppKit web component custom element to finish rendering its shadow DOM
+  useEffect(() => {
+    const checkElement = setInterval(() => {
+      const el = document.querySelector("appkit-button");
+      if (el && el.shadowRoot) {
+        setIsWalletReady(true);
+        clearInterval(checkElement);
+      }
+    }, 300);
+
+    return () => clearInterval(checkElement);
   }, []);
 
   const handleLogout = () => {
@@ -56,7 +71,6 @@ function Navbar() {
           gap: "0.5rem",
         }}
       >
-        {/* Modern Tech Glowing Icon Wrapper */}
         <div
           style={{
             background:
@@ -73,7 +87,6 @@ function Navbar() {
           <Vault size={24} style={{ color: "var(--accent-color)" }} />
         </div>
 
-        {/* High-End Typographic Branding */}
         <span
           className="text-gold"
           style={{
@@ -113,12 +126,42 @@ function Navbar() {
           </Link>
         ))}
 
-        {/* Wallet Button (AppKit) */}
+        {/* Wallet Button Container - Masking the 10s load latency */}
         <div
           className="wallet-btn-wrapper"
-          style={{ display: "flex", alignItems: "center" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            position: "relative",
+            minWidth: "135px",
+            minHeight: "40px",
+          }}
         >
-          <appkit-button />
+          {/* Glowing Premium Loader Shell Mask */}
+          {!isWalletReady && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(90deg, #1e1e1e 25%, #2d2d2d 50%, #1e1e1e 75%)",
+                backgroundSize: "200% 100%",
+                animation: "shimmer 1.5s infinite linear",
+                borderRadius: "10px",
+                border: "1px solid rgba(0, 255, 195, 0.2)",
+                boxShadow: "0 0 8px rgba(0, 255, 195, 0.1)",
+                zIndex: 5,
+                pointerEvents: "none",
+              }}
+            />
+          )}
+
+          <appkit-button
+            style={{
+              opacity: isWalletReady ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+          />
         </div>
 
         {/* Auth Section */}
